@@ -55,14 +55,31 @@ const DateInput = styled.input`
   padding: 4px;
   margin: 0 auto;
   font-size: 18px;
+  cursor: pointer;
 `;
 
 const SubmitButton = styled.button`
   width: fit-content;
+  padding: 8px 16px;
   font-size: 14px;
   font-weight: 500;
-  background-color: white;
-  border: 1px solid black;
+  color: #333;
+  background-color: transparent;
+  border: 2px solid #333;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #333;
+    color: white;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #666;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 export { LandingLayout };

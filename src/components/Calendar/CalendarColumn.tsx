@@ -71,6 +71,7 @@ const DateBox = styled.div<{
   cursor: pointer;
 
   &:hover {
-    background-color: #c1c1c1;
+    background-color: ${(props) =>
+      props.$hasShiftSelected ? "#ffd700" : "#c1c1c1"};
   }
 `;

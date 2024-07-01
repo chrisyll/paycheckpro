@@ -107,14 +107,14 @@ function MainLayout({ selectedDate, setIsDateSubmitted }: MainLayoutProps) {
           />
         </CalendarGrid>
         <ShiftSelectionPanelGrid>
-          {selectedDay && (
+          {selectedDay ? (
             <ShiftSelectionPanel
               selectedDay={selectedDay}
               setSelectedDay={setSelectedDay}
               monthlyShifts={monthlyShifts}
               handleSetShift={handleSetShift}
             />
-          )}
+          ) : null}
         </ShiftSelectionPanelGrid>
       </GridContainer>
       <CalculationsPanel monthlyShifts={monthlyShifts} />
@@ -143,6 +143,11 @@ const BackImgGrid = styled.div`
 
 const BackImg = styled.img`
   cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    transform: translate(-5px, 0px);
+  }
 `;
 
 const CalendarGrid = styled.div`

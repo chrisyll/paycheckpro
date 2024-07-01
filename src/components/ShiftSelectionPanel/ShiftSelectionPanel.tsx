@@ -56,6 +56,18 @@ const ShiftPanelContainer = styled.div`
   align-items: center;
   justify-content: space-evenly;
   position: relative;
+  animation: ShiftPanelAnimation 0.3s;
+
+  @keyframes ShiftPanelAnimation {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 `;
 
 const ShiftButton = styled.div<{ $isSelected: boolean }>`
@@ -64,6 +76,11 @@ const ShiftButton = styled.div<{ $isSelected: boolean }>`
   border-radius: 4px;
   text-align: center;
   padding: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => (props.$isSelected ? "#ffd700" : "#c1c1c1")};
+  }
 `;
 
 const CancelImg = styled.img`
@@ -72,4 +89,6 @@ const CancelImg = styled.img`
   position: absolute;
   top: 8px;
   right: 8px;
+  cursor: pointer;
+  padding: 4px;
 `;
