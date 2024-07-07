@@ -1,11 +1,13 @@
+import { useContext } from "react";
 import { MonthlyShift } from "../components/MainLayout/MainLayout";
-
-const BASE_SALARY = 1697;
-const BASE_HOURLY = parseFloat((BASE_SALARY / 280).toFixed(2));
-const BASE_NIGHT = parseFloat(((BASE_HOURLY * 60) / 100).toFixed(2));
-const BASE_HOLIDAY = parseFloat(((BASE_HOURLY * 75) / 100).toFixed(2));
+import { BaseSalaryContext } from "../context/SalaryContext";
 
 const calculatePay = (shiftObject: MonthlyShift, holidaysInMonth: Date[]) => {
+  const BASE_SALARY = useContext(BaseSalaryContext).baseSalary;
+  const BASE_HOURLY = parseFloat((BASE_SALARY / 280).toFixed(2));
+  const BASE_NIGHT = parseFloat(((BASE_HOURLY * 60) / 100).toFixed(2));
+  const BASE_HOLIDAY = parseFloat(((BASE_HOURLY * 75) / 100).toFixed(2));
+
   const isHoliday = holidaysInMonth.some(
     (holiday) => holiday.getTime() === shiftObject.date.getTime()
   );
@@ -54,4 +56,4 @@ const calculatePay = (shiftObject: MonthlyShift, holidaysInMonth: Date[]) => {
   }
 };
 
-export { calculatePay, BASE_SALARY };
+export { calculatePay };

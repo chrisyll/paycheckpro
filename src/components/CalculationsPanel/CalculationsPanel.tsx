@@ -1,19 +1,21 @@
 import styled from "styled-components";
 import { calculateHolidaysInMonth } from "../../utils/calculateHolidaysInMonth";
 import { MonthlyShift } from "../MainLayout/MainLayout";
-import { BASE_SALARY, calculatePay } from "../../utils/calculatePay";
+import { calculatePay } from "../../utils/calculatePay";
+import { useContext } from "react";
+import { SelectedDateContext } from "../../context/SelectedDateProvider";
+import { BaseSalaryContext } from "../../context/SalaryContext";
 
 interface CalculationsPanelProps {
   monthlyShifts: MonthlyShift[];
 }
 
 function CalculationsPanel({ monthlyShifts }: CalculationsPanelProps) {
+  const { selectedDate } = useContext(SelectedDateContext);
+  const { baseSalary } = useContext(BaseSalaryContext);
   const bookedShifts = monthlyShifts.filter((shift) => shift.shifts.length > 0);
 
-  const holidaysInMonth = calculateHolidaysInMonth(
-    monthlyShifts[0].date.getMonth(),
-    monthlyShifts[0].date.getFullYear()
-  );
+  const holidaysInMonth = calculateHolidaysInMonth(selectedDate);
 
   const extraPay = bookedShifts.reduce(
     (acc, shift) => acc + calculatePay(shift, holidaysInMonth),
@@ -59,9 +61,9 @@ function CalculationsPanel({ monthlyShifts }: CalculationsPanelProps) {
       </TextContainerGrid>
       <NumberContainerGrid>
         <TextContainer>Gross salary</TextContainer>
-        <NumberContainer>{BASE_SALARY}</NumberContainer>
+        <NumberContainer>{baseSalary}</NumberContainer>
         <ExtraSumContainer>{extraPay} +</ExtraSumContainer>
-        <TotalSalaryContainer>{BASE_SALARY + extraPay}</TotalSalaryContainer>
+        <TotalSalaryContainer>{baseSalary + extraPay}</TotalSalaryContainer>
       </NumberContainerGrid>
     </CalculationsPanelContainer>
   );

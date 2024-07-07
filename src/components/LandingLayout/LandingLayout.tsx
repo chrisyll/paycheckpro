@@ -1,17 +1,16 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import styled from "styled-components";
+import { SelectedDateContext } from "../../context/SelectedDateProvider";
+import { BaseSalaryContext } from "../../context/SalaryContext";
 
 interface LandingLayoutProps {
-  selectedDate?: string;
-  setSelectedDate: Dispatch<SetStateAction<string>>;
   setIsDateSubmitted: Dispatch<SetStateAction<boolean>>;
 }
 
-function LandingLayout({
-  selectedDate,
-  setSelectedDate,
-  setIsDateSubmitted,
-}: LandingLayoutProps) {
+function LandingLayout({ setIsDateSubmitted }: LandingLayoutProps) {
+  const { selectedDate, setSelectedDate } = useContext(SelectedDateContext);
+  const { baseSalary, setBaseSalary } = useContext(BaseSalaryContext);
+
   return (
     <LandingLayoutContainer>
       <DateLabel htmlFor="date">Date selection</DateLabel>
@@ -22,7 +21,22 @@ function LandingLayout({
         value={selectedDate}
         onChange={(e) => setSelectedDate(e.target.value)}
       />
-      <SubmitButton onClick={() => setIsDateSubmitted(true)}>
+      <SalaryInputContainer>
+        <SalaryInputLabel htmlFor="salary">Base salary</SalaryInputLabel>
+        <SalaryInput
+          type="number"
+          id="salary"
+          name="salary"
+          value={baseSalary || ""}
+          placeholder="0"
+          autoComplete="off"
+          onChange={(e) => setBaseSalary(Number(e.target.value))}
+        />
+      </SalaryInputContainer>
+      <SubmitButton
+        disabled={baseSalary <= 0}
+        onClick={() => setIsDateSubmitted(true)}
+      >
         SUBMIT
       </SubmitButton>
     </LandingLayoutContainer>
@@ -50,18 +64,65 @@ const DateLabel = styled.label`
 `;
 
 const DateInput = styled.input`
+  width: 200px;
   border: 1px solid #dfdfdf;
-  border-radius: 10px;
-  padding: 4px;
-  margin: 0 auto;
-  font-size: 18px;
-  cursor: pointer;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+
+  &:hover,
+  &:focus {
+    border-color: #666;
+    outline: none;
+  }
+`;
+
+const SalaryInputContainer = styled.div`
+  position: relative;
+  width: 120px;
+  margin: 12px auto;
+`;
+
+const SalaryInputLabel = styled.label`
+  position: absolute;
+  top: -10px;
+  left: 8px;
+  font-size: 12px;
+  background-color: white;
+  padding: 0 4px;
+`;
+
+const SalaryInput = styled.input`
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #dfdfdf;
+  border-radius: 20px;
+  padding: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+
+  &:hover,
+  &:focus {
+    border-color: #666;
+    outline: none;
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &[type="number"] {
+    -moz-appearance: textfield;
+  }
 `;
 
 const SubmitButton = styled.button`
-  width: fit-content;
+  margin: 8px 0;
   padding: 8px 16px;
-  font-size: 14px;
+  font-size: 16px; /* Increased font size for better readability and balance */
   font-weight: 500;
   color: #333;
   background-color: transparent;
@@ -79,6 +140,14 @@ const SubmitButton = styled.button`
     outline: none;
     border-color: #666;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #ccc;
+    border-color: #ccc;
+    color: #999;
   }
 `;
 

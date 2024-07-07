@@ -7,6 +7,7 @@ interface CalendarColumnProps {
   selectedDay?: Date;
   setSelectedDay: Dispatch<SetStateAction<Date | undefined>>;
   monthlyShifts: MonthlyShift[];
+  holidaysInMonth: Date[];
 }
 
 function CalendarColumn({
@@ -14,9 +15,14 @@ function CalendarColumn({
   selectedDay,
   setSelectedDay,
   monthlyShifts,
+  holidaysInMonth,
 }: CalendarColumnProps) {
+  const weekday = days[0].toLocaleDateString("en-US", { weekday: "short" })[0];
+  const isSunday = days[0].getDay() === 0;
+
   return (
     <CalendarColumnContainer>
+      <DayBox $isSunday={isSunday}>{weekday}</DayBox>
       {days[0].getDate() > days[0].getDay() && <EmptyBox />}
       {days.map((day) => (
         <DateBox
@@ -32,6 +38,11 @@ function CalendarColumn({
               (shift) => shift.date.getTime() === day.getTime()
             )?.shifts?.length
           }
+          $isHoliday={
+            holidaysInMonth.some(
+              (holiday) => holiday.getTime() === day.getTime()
+            ) || isSunday
+          }
         >
           {day.getDate()}
         </DateBox>
@@ -44,6 +55,17 @@ export { CalendarColumn };
 
 const CalendarColumnContainer = styled.div``;
 
+const DayBox = styled.div<{ $isSunday: boolean }>`
+  width: 24px;
+  height: 24px;
+  margin: 4px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 24px;
+  font-weight: 500;
+  color: ${(props) => (props.$isSunday ? "red" : "black")};
+`;
+
 const EmptyBox = styled.div`
   width: 24px;
   height: 24px;
@@ -54,10 +76,10 @@ const EmptyBox = styled.div`
 const DateBox = styled.div<{
   $isSelected: boolean;
   $hasShiftSelected: boolean;
+  $isHoliday: boolean;
 }>`
   width: 24px;
   height: 24px;
-  background-color: grey;
   background-color: ${(props) =>
     props.$hasShiftSelected
       ? "#ffd700"
@@ -69,6 +91,7 @@ const DateBox = styled.div<{
   vertical-align: middle;
   line-height: 24px;
   cursor: pointer;
+  color: ${(props) => (props.$isHoliday ? "red" : "black")};
 
   &:hover {
     background-color: ${(props) =>

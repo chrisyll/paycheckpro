@@ -1,15 +1,15 @@
 import { Calendar } from "../Calendar/Calendar";
 import arrowBack from "../../assets/arrow_back.png";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import styled from "styled-components";
 import {
   Shift,
   ShiftSelectionPanel,
 } from "../ShiftSelectionPanel/ShiftSelectionPanel";
 import { CalculationsPanel } from "../CalculationsPanel/CalculationsPanel";
+import { SelectedDateContext } from "../../context/SelectedDateProvider";
 
 interface MainLayoutProps {
-  selectedDate: string;
   setIsDateSubmitted: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -38,7 +38,8 @@ function initializeMonthlyShifts(days: Date[]) {
   }));
 }
 
-function MainLayout({ selectedDate, setIsDateSubmitted }: MainLayoutProps) {
+function MainLayout({ setIsDateSubmitted }: MainLayoutProps) {
+  const { selectedDate } = useContext(SelectedDateContext);
   const days = getAllDaysInMonth(selectedDate);
 
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
@@ -90,6 +91,7 @@ function MainLayout({ selectedDate, setIsDateSubmitted }: MainLayoutProps) {
 
   return (
     <MainLayoutContainer>
+      <SelectedDateTitle>{selectedDate}</SelectedDateTitle>
       <GridContainer>
         <BackImgGrid>
           <BackImg
@@ -130,6 +132,12 @@ const MainLayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
+`;
+
+const SelectedDateTitle = styled.div`
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
 `;
 
 const GridContainer = styled.div`

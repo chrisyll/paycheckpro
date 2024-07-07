@@ -9,6 +9,7 @@ enum Holidays {
   EASTER_MONDAY = "Easter Monday",
   LABOUR_DAY = "Labour Day",
   PENTECOST = "Pentecost",
+  HOLY_SPIRIT = "Holy spirit",
   DORMITION = "Dormition of the Mother of God",
   OHI = "Ohi Day",
   SAINT_BARBARA = "Saint Barbara",
@@ -16,10 +17,12 @@ enum Holidays {
   GLORIFYING_MOTHER = "Glorifying Mother of God",
 }
 
-function calculateHolidaysInMonth(month: number, year: number) {
+function calculateHolidaysInMonth(date: string) {
+  const [year, month] = date.split("-").map(Number);
+
   const publicHolidays = calculateHolidayDates(year);
 
-  return publicHolidays.filter((date) => date.getMonth() === month);
+  return publicHolidays.filter((date) => date.getMonth() === month - 1);
 }
 
 function calculateHolidayDates(year: number) {
@@ -44,6 +47,9 @@ function calculateHolidayDates(year: number) {
     [Holidays.LABOUR_DAY]: new Date(year, 4, 1),
     [Holidays.PENTECOST]: new Date(
       easterDate.getTime() + 49 * 24 * 60 * 60 * 1000
+    ),
+    [Holidays.HOLY_SPIRIT]: new Date(
+      easterDate.getTime() + 50 * 24 * 60 * 60 * 1000
     ),
     [Holidays.DORMITION]: new Date(year, 7, 15),
     [Holidays.OHI]: new Date(year, 9, 28),

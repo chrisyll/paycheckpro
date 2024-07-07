@@ -1,7 +1,10 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import { CalendarColumn } from "./CalendarColumn";
 import { MonthlyShift } from "../MainLayout/MainLayout";
 import styled from "styled-components";
+
+import { calculateHolidaysInMonth } from "../../utils/calculateHolidaysInMonth";
+import { SelectedDateContext } from "../../context/SelectedDateProvider";
 
 interface CalendarProps {
   days: Date[];
@@ -16,7 +19,10 @@ function Calendar({
   setSelectedDay,
   monthlyShifts,
 }: CalendarProps) {
+  const { selectedDate } = useContext(SelectedDateContext);
+  const holidaysInMonth = calculateHolidaysInMonth(selectedDate);
   const dayNumbers = [0, 1, 2, 3, 4, 5, 6];
+
   return (
     <CalendarContainer>
       {dayNumbers.map((dayNumber) => (
@@ -26,6 +32,7 @@ function Calendar({
           selectedDay={selectedDay}
           setSelectedDay={setSelectedDay}
           monthlyShifts={monthlyShifts}
+          holidaysInMonth={holidaysInMonth}
         />
       ))}
     </CalendarContainer>
